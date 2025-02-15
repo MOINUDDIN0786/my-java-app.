@@ -2,23 +2,16 @@ pipeline {
     agent any
 
     environment {
-        GITHUB_CREDENTIALS = 'github-pat'  // Make sure this matches the ID in Jenkins credentials
-        MAVEN_TOOL = 'Maven'  // Ensure this is the correct Maven tool name in Jenkins
+        GITHUB_CREDENTIALS = 'github-ssh'  // Update to your Jenkins SSH credentials ID
+        MAVEN_TOOL = 'Maven'  // Name of Maven tool configured in Jenkins
     }
 
     stages {
         stage('Checkout Code') {
             steps {
-                script {
-                    checkout([
-                        $class: 'GitSCM',
-                        branches: [[name: '*/main']],
-                        userRemoteConfigs: [[
-                            url: 'https://github.com/MOINUDDIN0786/my-java-app.git',
-                            credentialsId: GITHUB_CREDENTIALS
-                        ]]
-                    ])
-                }
+                git branch: 'main',
+                    credentialsId: GITHUB_CREDENTIALS,
+                    url: 'git@github.com:MOINUDDIN0786/my-java-app.git'  // Use SSH URL
             }
         }
 
@@ -32,4 +25,3 @@ pipeline {
         }
     }
 }
-
