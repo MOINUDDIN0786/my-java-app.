@@ -16,7 +16,7 @@ pipeline {
                         doGenerateSubmoduleConfigurations: false,
                         extensions: [],
                         userRemoteConfigs: [[
-                            url: 'https://github.com/MOINUDDIN0786/my-java-app..git',
+                            url: 'https://github.com/MOINUDDIN0786/my-java-app.git', // Fixed double dot in URL
                             credentialsId: GITHUB_CREDENTIALS
                         ]]
                     ])
@@ -28,8 +28,10 @@ pipeline {
             steps {
                 script {
                     def mvnHome = tool name: MAVEN_TOOL, type: 'maven'
-                    sh "cd my-java-app" && "${mvnHome}/bin/mvn clean package"
-                   // sh "${mvnHome}/bin/mvn clean package"
+                    sh """
+                        cd my-java-app
+                        ${mvnHome}/bin/mvn clean package
+                    """
                 }
             }
         }
