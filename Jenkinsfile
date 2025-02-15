@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         GITHUB_CREDENTIALS = 'github-token'  // Update to your Jenkins SSH credentials ID
-        MAVEN_TOOL = 'Maven'  // Name of Maven tool configured in Jenkins
+        MAVEN_TOOL = 'maven'  // Name of Maven tool configured in Jenkins
     }
 
     stages {
