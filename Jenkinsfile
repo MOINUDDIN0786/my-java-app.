@@ -16,7 +16,7 @@ pipeline {
                         doGenerateSubmoduleConfigurations: false,
                         extensions: [],
                         userRemoteConfigs: [[
-                            url: 'https://github.com/MOINUDDIN0786/my-java-app.git', // Fixed double dot in URL
+                            url: 'https://github.com/MOINUDDIN0786/my-java-app..git', // Fixed double dot in URL
                             credentialsId: GITHUB_CREDENTIALS
                         ]]
                     ])
