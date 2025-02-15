@@ -48,19 +48,5 @@ pipeline {
                 }
             }
         }
-
-        stage('Code Quality Analysis') {
-            steps {
-                script {
-                    def mvnHome = tool name: MAVEN_TOOL, type: 'maven'
-                    withSonarQubeEnv(SONARQUBE_SERVER) {
-                        sh """
-                            cd my-java-app
-                            ${mvnHome}/bin/mvn sonar:sonar -Dsonar.projectKey=my-java-app
-                        """
-                    }
-                }
-            }
-        }
     }
 }
