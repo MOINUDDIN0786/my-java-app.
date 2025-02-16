@@ -2,9 +2,10 @@ pipeline {
     agent any
 
     environment {
-        GITHUB_CREDENTIALS = 'github-token'  // Update to your Jenkins SSH credentials ID
-        MAVEN_TOOL = 'maven'  // Name of Maven tool configured in Jenkins
-        SONARQUBE_SERVER = 'sonarqube'  // Update to your Jenkins SonarQube server ID
+        GITHUB_CREDENTIALS = 'github-token'  // Jenkins GitHub credentials
+        MAVEN_TOOL = 'maven'  // Jenkins Maven tool name
+        DOCKER_CREDENTIALS = 'docker-hub-credentials'  // Docker Hub credentials ID in Jenkins
+        DOCKER_IMAGE = 'moinuddin62046/sample-java-app'  // Your Docker Hub repository
     }
 
     stages {
@@ -17,7 +18,7 @@ pipeline {
                         doGenerateSubmoduleConfigurations: false,
                         extensions: [],
                         userRemoteConfigs: [[
-                            url: 'https://github.com/MOINUDDIN0786/my-java-app..git',
+                            url: 'https://github.com/MOINUDDIN0786/my-java-app.git',
                             credentialsId: GITHUB_CREDENTIALS
                         ]]
                     ])
@@ -45,6 +46,30 @@ pipeline {
                         cd my-java-app
                         ${mvnHome}/bin/mvn test
                     """
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    sh """
+                        cd my-java-app
+                        docker build -t ${DOCKER_IMAGE}:latest .
+                    """
+                }
+            }
+        }
+
+        stage('Push Docker Image to Docker Hub') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: DOCKER_CREDENTIALS, usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    script {
+                        sh """
+                            echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                            docker push ${DOCKER_IMAGE}:latest
+                        """
+                    }
                 }
             }
         }
